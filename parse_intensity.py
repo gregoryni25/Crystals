@@ -93,7 +93,10 @@ def parse(filename, numrays):
         fid.readline()
         
         # go through segs, accumulate pathlength
-        A.append(parse_segs(fid, numseg))
+        # this results in [[r1],[r2],[r3]...]
+        # A.append(parse_segs(fid, numseg))
+        # this results in [r1,r2,r3...]
+        A += parse_segs(fid, numseg)
  
         idx += 1
     fid.close()
