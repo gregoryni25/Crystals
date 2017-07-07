@@ -20,17 +20,18 @@ def parse_segs_data(aline):
     """
     aline = aline.split()  #,'%s','delimiter','\t');
 
+    # hit face 3, the front detector
     if int(aline[4]) == 3:
         return [-3, int(aline[1]), (float(aline[9]), float(aline[10]),
                  float(aline[11])), float(aline[12])]
+    # hit face 4, the front detector
     if int(aline[4]) == 4:
         return [-4, int(aline[1]), (float(aline[9]), float(aline[10]),
                  float(aline[11])), float(aline[12])]
 
-    # if level is 10, don't store, these lines can be added to save memory
-    # it is also possible to check if terminated, then don't store
-    #if aline[2] == 10:
-    #    return []
+    # if it didn't hit detector 3 or 4 but still terminated, then don't store
+    if aline[6] == '*---':
+        return [0]
 
     return [int(aline[1]), (float(aline[9]), float(aline[10]),
              float(aline[11]))]
@@ -48,8 +49,7 @@ def parse_segs(fid, numseg):
 
     for idx in range(numseg+1):
         aline = fid.readline()
-        x = parse_segs_data(aline)
-        D.append(x)
+        D.append(parse_segs_data(aline))
         if D[idx][0] == -3:
             R.append((1, D[idx][3], pathlength(D, D[idx][2], D[idx][1])))
         if D[idx][0] == -4:
