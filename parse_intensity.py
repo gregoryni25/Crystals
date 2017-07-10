@@ -21,7 +21,11 @@ def parse_segs_data(D, aline):
     if int(aline[4]) == 3:
         return [-3, int(aline[1]), (float(aline[9]), float(aline[10]),
                  float(aline[11])), float(aline[12])]
+<<<<<<< HEAD
     # hit face 4, the back detector
+=======
+    # hit face 4, the front detector
+>>>>>>> c641a7aebb23d38f83ed47ddcfd85241447bf517
     if int(aline[4]) == 4:
         return [-4, int(aline[1]), (float(aline[9]), float(aline[10]),
                  float(aline[11])), float(aline[12])]
@@ -29,12 +33,15 @@ def parse_segs_data(D, aline):
     # if it didn't hit detector 3 or 4 but still terminated, then don't store
     if aline[6] == '*---':
         return [0]
+<<<<<<< HEAD
     
     # base case
     if aline[0] == '0':
         return [int(aline[1]), (float(aline[9]), float(aline[10]),
              float(aline[11])), 0]
         
+=======
+>>>>>>> c641a7aebb23d38f83ed47ddcfd85241447bf517
 
     return [int(aline[1]), (float(aline[9]), float(aline[10]),
              float(aline[11])), pathlength(D, (float(aline[9]), 
@@ -53,7 +60,11 @@ def parse_segs(fid, numseg):
 
     for idx in range(numseg+1):
         aline = fid.readline()
+<<<<<<< HEAD
         D.append(parse_segs_data(D, aline))
+=======
+        D.append(parse_segs_data(aline))
+>>>>>>> c641a7aebb23d38f83ed47ddcfd85241447bf517
         if D[idx][0] == -3:
             R.append((1, D[idx][3], pathlength(D, D[idx][2], D[idx][1])))
         if D[idx][0] == -4:
