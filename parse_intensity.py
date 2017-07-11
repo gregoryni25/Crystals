@@ -2,6 +2,36 @@ import numpy as np
 import matplotlib.pyplot as pl
 import time
 
+def dens_m(z, n, c, t):
+    '''density fcn for unit power'''
+    coeff = z*n/c
+    out = coeff/2 / t**2
+    out[t < coeff] = 0
+    return out
+
+def trape_dens(edge1, edge2, z, n, c, nn):
+    t = np.linspace(edge1, edge2, nn)
+    y = dens_m(z, n, c, t)
+    return np.trapz(y, t)
+
+def theoretical_bins(edges, z=None, n=1.82, c=299792458, nn=100, NN=1):
+    '''
+    edges       bin edges in time (s)
+    z           distance from source to end cap
+    n           refractive index
+    c           speed of light
+    nn          number of points used in trapezoidal integration
+    NN          total number of rays
+    output:
+    contents    bin contents
+    '''
+    if z is None:
+        z = edges[0]*c/n
+    contents = np.empty(len(edges)-1)
+    for i in range(len(contents)):
+        contents = trape_dens(edges[i], edges[i+1], nn)
+    return NN * contents
+
 def pathlength(D, fcoor, parent):
     """
     takes in temp Data array, first coordinate and parent, and returns the
