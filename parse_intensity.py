@@ -150,7 +150,24 @@ def parse(filename, numrays):
 # returns (number of rays, number hit front, edges, tops)
 def specs(parsedarr, plhistarr):
     return (len(parsedarr), sum(parsedarr[:,0]), plhistarr[1], plhistarr[0])
-    
+
+#returns an array with only rays that hit the front detector
+def onlyfront(parsedarr):
+    indexarray = []
+    for idx in range(len(parsedarr)):
+        if parsedarr[idx][0] == 0:
+            indexarray.append(idx)
+    return np.delete(parsedarr, indexarray, 0)
+
+#returns an array with only rays that hit the back detector
+def onlyback(parsedarr):
+    indexarray = []
+    for idx in range(len(parsedarr)):
+        if parsedarr[idx][0] == 1:
+            indexarray.append(idx)
+    return np.delete(parsedarr, indexarray, 0)
+            
+
 """
 total rays : len(parsedarr)
 total intensity : sum(parsedarr[:,1])
@@ -163,13 +180,14 @@ top list : plhistarr[0]
     
 t = time.time()
 
-A = np.array(parse('5000-4.txt',5000))
-#B = np.array(parse('5000-3.txt',5000))
-#C = np.array(parse('5000-2.txt',5000))
+A = np.array(parse('5000-100.txt',5000))
+#B = np.array(parse('10000-3.txt',5000))
+#C = np.array(parse('10000-4.txt',5000))
+#D = np.array(parse('10000-5.txt',5000))
 _c_ = 299792458*1000
 _n_ = 1.82
 _mc_ = _n_/_c_
-A2 = pl.hist((A[:,2]*_mc_), bins=50, weights=A[:,1], alpha=0.5, label="four")
+A2 = pl.hist((A[:,2]*_mc_), range=(0.05*1e-10, 1.5*1e-10), bins=500, weights=A[:,1], alpha=0.5, label="four")
 #B2 = pl.hist(B[:,2]*_mc_, bins=50, weights=B[:,1], alpha=0.5, label="three")
 #C2 = pl.hist(C[:,2]*_mc_, bins=50, weights=C[:,1], alpha=0.5, label="two")
 
