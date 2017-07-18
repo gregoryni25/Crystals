@@ -2,6 +2,9 @@ import numpy as np
 import matplotlib.pyplot as pl
 import time
 
+def edge2cen(edges):
+    return (edges[:-1] + edges[1:])/2
+
 def dens_m(z, n, c, t):
     '''density fcn for unit power'''
     coeff = z*n/c
@@ -180,16 +183,24 @@ top list : plhistarr[0]
     
 t = time.time()
 
-A = np.array(parse('5000-100.txt',5000))
-#B = np.array(parse('10000-3.txt',5000))
-#C = np.array(parse('10000-4.txt',5000))
-#D = np.array(parse('10000-5.txt',5000))
+data_path = '../Crystal Data/'
+
+A = np.array(parse(data_path+'5000-4.txt',5000))
+#B = np.array(parse(data_path+'5000-3.txt',5000))
+#C = np.array(parse(data_path+'5000-2.txt',5000))
 _c_ = 299792458*1000
 _n_ = 1.82
 _mc_ = _n_/_c_
-A2 = pl.hist((A[:,2]*_mc_), range=(0.05*1e-10, 1.5*1e-10), bins=500, weights=A[:,1], alpha=0.5, label="four")
-#B2 = pl.hist(B[:,2]*_mc_, bins=50, weights=B[:,1], alpha=0.5, label="three")
-#C2 = pl.hist(C[:,2]*_mc_, bins=50, weights=C[:,1], alpha=0.5, label="two")
+
+iflog = True
+
+A2 = pl.hist((A[:,2]*_mc_), bins=50, weights=A[:,1], alpha=0.5, label="4",
+             log=iflog)
+#B2 = pl.hist(B[:,2]*_mc_, bins=50, weights=B[:,1], alpha=0.5, label="3",
+#             log=iflog)
+#C2 = pl.hist(C[:,2]*_mc_, bins=50, weights=C[:,1], alpha=0.5, label="2",
+#             log=iflog)
+
 
 pl.legend()
 pl.xlabel("Time (seconds)")
@@ -199,5 +210,10 @@ A3 = specs(A,A2)
 #B3 = specs(B,B2)
 #C3 = specs(C,C2)
 
-
+bin_edges = A2[1]
+A_th = theoretical_bins(bin_edges)
+pl.plot(edge2cen(bin_edges), A_th, '.')
+if iflog:
+    pl.gca().set_yscale('log')
+    
 print(time.time()-t)
