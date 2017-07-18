@@ -153,7 +153,24 @@ def parse(filename, numrays):
 # returns (number of rays, number hit front, edges, tops)
 def specs(parsedarr, plhistarr):
     return (len(parsedarr), sum(parsedarr[:,0]), plhistarr[1], plhistarr[0])
-    
+
+#returns an array with only rays that hit the front detector
+def onlyfront(parsedarr):
+    indexarray = []
+    for idx in range(len(parsedarr)):
+        if parsedarr[idx][0] == 0:
+            indexarray.append(idx)
+    return np.delete(parsedarr, indexarray, 0)
+
+#returns an array with only rays that hit the back detector
+def onlyback(parsedarr):
+    indexarray = []
+    for idx in range(len(parsedarr)):
+        if parsedarr[idx][0] == 1:
+            indexarray.append(idx)
+    return np.delete(parsedarr, indexarray, 0)
+            
+
 """
 total rays : len(parsedarr)
 total intensity : sum(parsedarr[:,1])
@@ -183,6 +200,7 @@ A2 = pl.hist((A[:,2]*_mc_), bins=50, weights=A[:,1], alpha=0.5, label="4",
 #             log=iflog)
 #C2 = pl.hist(C[:,2]*_mc_, bins=50, weights=C[:,1], alpha=0.5, label="2",
 #             log=iflog)
+
 
 pl.legend()
 pl.xlabel("Time (seconds)")
