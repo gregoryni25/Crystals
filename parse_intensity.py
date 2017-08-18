@@ -191,8 +191,8 @@ t = time.time()
 
 data_path = '../Crystal Data/'
 
-_numrays_ = 5000
-A = np.array(parse('%d-2-2.txt' % _numrays_ ,_numrays_, level=True))
+_numrays_ = 100
+A = np.array(parse('%d-5-e15-65k.txt' % _numrays_ ,_numrays_, level=False))
 #B = np.array(parse(data_path+'5000-3.txt',5000))
 #C = np.array(parse(data_path+'5000-2.txt',5000))
 _c_ = 299792458*1000 #since distance measured in millimeters
@@ -211,10 +211,10 @@ _levelweight_=(1/_split_)
 
 #, weights=Af[:,1]
 #, range=(np.amin(Af[:,2]*_mc_), 2.5e-9)
-A1 = pl.hist((Af[:,2]*_mc_), bins=50, range=(np.amin(Af[:,2]*_mc_), 2.5e-9), weights=_levelweight_ ** (Af[:,1]-1), alpha=0.5, label="front",
+A1 = pl.hist((Af[:,2]*_mc_), bins=50, weights=Af[:,1], range=(np.amin(Af[:,2]*_mc_), 2.5e-9), alpha=0.5, label="front",
              log=iflog)
 
-A2 = pl.hist((Ab[:,2]*_mc_), bins=50, range=(np.amin(Ab[:,2]*_mc_), 2.5e-9), weights=_levelweight_ ** (Ab[:,1]-1), alpha=0.5, label="back",
+A2 = pl.hist((Ab[:,2]*_mc_), bins=50, weights=Ab[:,1], range=(np.amin(Ab[:,2]*_mc_), 2.5e-9), alpha=0.5, label="back",
              log=iflog)
 
 #B2 = pl.hist(B[:,2]*_mc_, bins=50, weights=B[:,1], alpha=0.5, label="3",
@@ -238,6 +238,7 @@ pl.plot(edge2cen(bin_edges), A_th2, '.')
 #sumAth = A_th1 + A_th2
 
 #pl.plot(edge2cen(bin_edges), sumAth, '.')
+
 if iflog:
     pl.gca().set_yscale('log')
     
